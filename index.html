@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <h1>Chat</h1>
+    <div id="users_component">
+      <ul id="users_list"></ul>  
+    </div>
+    <div id="talk" style="height:600px;"></div>
+    <div id="message_input">
+      <input type="text" 
+             name="message" 
+             value="" 
+             style="width: 90%; padding:1em; font-size:2em; border:2px dotted #00f;">
+    </div>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="js/handlebars-1.0.0.beta.6.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script type="text/javascript">  
+      $(document).ready(function() {
+
+        var user_1 = {
+          nome: "User 1",
+          idade: 20
+        };
+        
+        var user_2 = {
+          nome: "User 2",
+          idade: 30
+        };
+        
+        var user_3 = {
+          nome: "User 3",
+          idade: 40
+        };
+
+        //                    0       1       2
+        var online_users = [user_1, user_2, user_3];
+        
+        var new_message = function(message) {
+          var content = $("#message").html();
+          var template = Handlebars.compile(content);
+          $('#talk').append(template({message: message}));
+        }
+
+        var new_user = function(user_object) {
+          var content = $("#user_template").html();
+          var template = Handlebars.compile(content);
+          var markup = template({user: user_object});
+          $('#users_list').append(markup);
+        }
+
+        var new_message_template = function(abobrinha) {
+          return "<p>" + abobrinha + "</p>";
+        }
+
+        for (var i = 0; i < online_users.length; i++) {
+          var user = online_users[i];
+          new_user(user);
+        }
+
+        _.each(online_users, function(elem) {
+          
+        });
+
+        var evento_up = function(event){
+          if(event.keyCode == 13){
+            var message_content = $("input[name=message]").val();
+            var message_markup = new_message_template(message_content);
+            $('#talk').append(message_markup);
+            //new_message;
+            $("input[name=message]").val("");
+          }
+        };
+
+        $("input[name=message]").keyup(evento_up);
+    });
+    </script>
+    <script id="message" type="text/x-handlebars-template">
+      <span class="user_message">{{message}}</span>
+    </script>
+    <script id="user_template" type="text/x-handlebars-template">
+      <li class="user_message">{{user.idade}} - {{user.nome}}</li>
+    </script>
+  </body>
+</html>
